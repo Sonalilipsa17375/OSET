@@ -23,18 +23,18 @@ load('SampleECG2.mat'); data = data(1:15000,6)';
 % load('sig'); data = sig(1:15000,1)'; clear sig;
 
 fs = 1000;
-f0 = 50;
+f0 = 60;
 data = data - LPFilter(data, 1.0/fs);
 
 % data = .1*randn(1,20000);
 n = (0:length(data)-1);
-% x = 1.0*data + (.055+.02*sin(2*pi*n*.1/fs)).*sin(2*pi*n*f0/fs)/std(data);
-x = data + 0.1 * sin(2*pi*n*f0/fs+pi/9)/std(data);
+x = 1.0*data + (.055+.02*sin(2*pi*n*.1/fs)).*sin(2*pi*n*f0/fs)/std(data);
+% x = data + 0.1 * sin(2*pi*n*f0/fs+pi/9)/std(data);
 % % % % % % x = data;% + .2*randn(size(data));
 
 % [y1,y2,Pbar,Phat,PSmoothed,Kgain] = KFNotch(x,f0,fs);
 % [y1,y2,Pbar,Phat,PSmoothed,Kgain] = KFNotch(x,f0,fs,1e-3,.1*var(x),.9);
-[y1,y2,Pbar,Phat,PSmoothed,Kgain] = KFNotch(x, f0, fs, 1e-3, 1*var(x), 1.0);
+[y1,y2,Pbar,Phat,PSmoothed,Kgain] = KFNotch(x, f0, fs, 1e-3, 1*var(x), 0.999);
 
 
 t = n/fs;

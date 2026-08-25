@@ -34,10 +34,10 @@ load('SampleECG1kHz1.mat'); fs = 1000; % sample ECG 1
 % load('SamplePowerlineNoise1kHz'); data = sig(1:15000,1)'; fs = 1000; % sample powerline artifact
 % load('SampleFECGDaISy'); data = cell2mat(data); data = data(1, :); fs = cell2mat(fs);
 
-f0 = 50;
+f0 = 60;
 
 % baseline wander removal
-data = data - LPFilter(data, 0.5/fs);
+data = data - lp_filter_zero_phase(data, 0.5/fs);
 
 n = (0:length(data)-1);
 x = data + .01*sin(2*pi*n*0.1/fs).*sin(2*pi*n*f0/fs)/std(data); % nonstationary powerline noise scenario 0
@@ -75,15 +75,15 @@ legend('noisy ECG', 'Kalman filter', 'Kalman smoother', 'Original ECG', 'Kalman 
 title('Powerline Cancellation using the Kalman Filter');
 
 figure;
-psd(x, length(x)/2,fs);
+pwelch(x, length(x)/2,fs);
 title('noisy spectrum');
 
 figure;
-psd(KF, length(KF)/2,fs);
+pwelch(KF, length(KF)/2,fs);
 title('Kalman filter output spectrum');
 
 figure;
-psd(KS, length(KS)/2,fs);
+pwelch(KS, length(KS)/2,fs);
 title('Kalman smoother output spectrum');
 
 figure;

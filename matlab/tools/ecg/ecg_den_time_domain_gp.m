@@ -99,7 +99,7 @@ for ch = 1 : size(data, 1)
     x = data(ch, :); % the active channel
 
     stacked_beats = event_stacker(x, peak_indexes, event_width);
-    [ECG_mean, ECG_var_mn, ECG_median, ECG_var_md] = robust_weighted_average(stacked_beats);
+    [ECG_mean, ECG_var_mn, ECG_median, ECG_var_md, ECG_best, ECG_var_best] = robust_weighted_average(stacked_beats);
     sample_indexes = (0 : size(stacked_beats, 2) - 1) - (size(stacked_beats, 2)/2);
 
     switch params.BEAT_AVG_METHOD
@@ -109,6 +109,9 @@ for ch = 1 : size(data, 1)
         case 'MEDIAN'
             ECG_avg = ECG_median;
             ECG_std = sqrt(ECG_var_md);
+        case 'BEST-BEAT'
+            ECG_avg = ECG_best;
+            ECG_std = sqrt(ECG_var_best);
     end
 
 

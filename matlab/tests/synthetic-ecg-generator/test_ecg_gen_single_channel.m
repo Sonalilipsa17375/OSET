@@ -49,7 +49,7 @@ pphase = phase_shifter(phase,teta);             % phase shifting
 % bi = [.2 .2 .2 .2 .3];
 % tetai = pi*[-60 -15 0 15 90]/180;
 
-alphai = [.1 -.2 1 -.3 .15];
+alphai = [.1 -.2 1 -.3 .05];
 bi = [.3 .2 .2 .2 .5];
 tetai = pi*[-90 -10 0 15 100]/180;
 

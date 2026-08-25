@@ -27,14 +27,16 @@ x = data;
 % beta = .5;
 
 mdl = arx(x', 12);
+% mdl = arx(x', 1);
 a = get(mdl, 'a');
 b = 1;
 beta = get(mdl, 'NoiseVariance');
 gamma = 1.0;%0.9;
 wlen = round(fs*.250);
 
-[y1f,y1s,Pbar,Phat,PSmoothed,Kgain] = KalmanARFilter(x, b, a, beta, var(x - BPFilter(x,4/fs,25/fs)), gamma, wlen, 'obsrv');
-% [y2f,y2s,Pbar,Phat,PSmoothed,Kgain] = KalmanARFilter(x, b, a, beta, var(x - BPFilter(x,4/fs,25/fs)), gamma, wlen, 'cntrl');
+% [y1f,y1s,Pbar,Phat,PSmoothed,Kgain] = arma_kalman_filter(x, b, a, beta, var(x - bp_filter_dft(x,4/fs,25/fs)), gamma, wlen, 'observer');
+% [y2f,y2s,Pbar,Phat,PSmoothed,Kgain] = arma_kalman_filter(x, b, a, beta, var(x - bp_filter_dft(x,4/fs,25/fs)), gamma, wlen, 'controller');
+[y1f,y1s,Pbar,Phat,PSmoothed,Kgain] = arma_kalman_filter(x, b, a, beta, 50*var(x - bp_filter_dft(x,4/fs,25/fs)), gamma, wlen, 'observer');
 
 t = (0:length(data)-1)/fs;
 
@@ -42,8 +44,10 @@ figure;
 hold on;
 lbl = {};
 plot(t, x, 'b'); lbl = cat(2, lbl, 'Noisy signal');
-plot(t, x - y1s, 'r'); lbl = cat(2, lbl, 'Kalman filter denoised');
-plot(t, x - y1f, 'm');  lbl = cat(2, lbl, 'Kalman smoother denoised');
+plot(t, x - y1f, 'r'); lbl = cat(2, lbl, 'Kalman filter denoised');
+plot(t, x - y1s, 'm');  lbl = cat(2, lbl, 'Kalman smoother denoised');
+plot(t, y1f, 'c'); lbl = cat(2, lbl, 'Baseline Kalman filter');
+plot(t, y1s, 'k'); lbl = cat(2, lbl, 'Baseline Kalman smoother');
 grid;
 xlabel('time (sec.)');
 legend(lbl);
